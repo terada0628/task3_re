@@ -1,5 +1,7 @@
 class BooksController < ApplicationController
 
+before_action :book_all
+
   def create
     @new_book = Book.new(book_params)
     @new_book.user_id = current_user.id
@@ -7,7 +9,6 @@ class BooksController < ApplicationController
     redirect_to book_path(@new_book[:id]), notice: 'You have created book successfully.'
    else
     @user = current_user
-    @books = Book.all
     render :index
    end
   end
@@ -15,13 +16,14 @@ class BooksController < ApplicationController
   def index
     @new_book = Book.new
     @user = current_user
-    @books = Book.all
+    # @books = Book.all   before_actionで定義済み
   end
 
   def show
     @new_book = Book.new
     @book = Book.find(params[:id])
     @user = @book.user
+    # @books = Book.all  before_actionで定義済み
   end
 
   def edit
@@ -51,6 +53,12 @@ class BooksController < ApplicationController
   def book_params
     params.require(:book).permit(:title,:body)
   end
+  
+  # booksの定義を全アクションで指定
+  def book_all
+    @books = Book.all
+  end
 
 
 end
+
