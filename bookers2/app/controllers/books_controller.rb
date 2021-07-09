@@ -24,6 +24,7 @@ before_action :book_all
     @book = Book.find(params[:id])
     @user = @book.user
     # @books = Book.all  before_actionで定義済み
+    @post_comment = PostComment.new
   end
 
   def edit
@@ -53,7 +54,7 @@ before_action :book_all
   def book_params
     params.require(:book).permit(:title,:body)
   end
-  
+
   # booksの定義を全アクションで指定
   def book_all
     @books = Book.all
