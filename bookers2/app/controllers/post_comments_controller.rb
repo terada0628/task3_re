@@ -1,16 +1,19 @@
 class PostCommentsController < ApplicationController
 
   def create
-    book = Book.find(params[:book_id])
-    comment = current_user.post_comments.new(post_comment_params)
+    @book = Book.find(params[:book_id])
+    @post_comment = current_user.post_comments.new(post_comment_params)
     # comment = PostComment.new(post_comment_params)
     # comment.user_id = current_user.id の意味
-    comment.book_id = book.id
-    if comment.save
-    redirect_to book_path(book)
+    @post_comment.book_id = @book.id
+    if @post_comment.save
+    redirect_to book_path(@book), notice: 'You have created comment  successfully.'
     else
-    redirect_to book_path(book)
-  end
+    @new_book = Book.new
+    @book = Book.find(params[:book_id])
+    @user = @book.user
+    render template: "books/show"
+    end
   end
 
   def destroy
